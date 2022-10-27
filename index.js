@@ -1,25 +1,21 @@
-const fs = require('fs');
+const fsPromises = require('fs').promises;
 const path = require('path');
 
-fs.readFile(path.join(__dirname, 'files', 'starter.txt'), 'utf8', (err, data) => {
-  if(err) throw err;
-  // console.log(data)
-})
+const fileOps = async() => {
+  try{
+    const data = await fsPromises.readFile(path.join(__dirname, 'files', 'starter.txt'), 'utf-8');
+    console.log(data);
+    //Delete original file
+    fsPromises.unlink(path.join(__dirname, 'files', 'starter.txt'));
+    await fsPromises.writeFile(path.join(__dirname, 'files', 'promiseFile.txt'), data);
+    await fsPromises.appendFile(path.join(__dirname, 'files', 'promiseFile.txt'), `\n\n-* NEW *-\nIf you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.`);
+    await fsPromises.rename(path.join(__dirname, 'files', 'promiseFile.txt'),path.join(__dirname, 'files', 'file1.txt'));
+    
+  } catch (err) {
+    console.log(err)
+  }
+}
 
-// exit on uncaught errors
-process.on('uncaughtException', err => {
-  console.log(`There was an uncaught error: ${err}`);
-  process.exit(1);
-})
+fileOps();
 
-fs.writeFile(path.join(__dirname, 'files', 'file1.txt'),`If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.`, (err) => {
-  if(err) throw err;
-  console.log('\nThe file has been written!')
-
-  fs.appendFile(path.join(__dirname, 'files', 'file1.txt'),`\n\n*** NEW ***\nIf you are going to change a passage of Lorem Ipsum, you need to be sure that the change will be funny.`, (err) => {
-    if(err) throw err;
-    console.log('\nThe append is complete!')
-  })
-
-})
 
