@@ -15,4 +15,11 @@ process.on('uncaughtException', err => {
 fs.writeFile(path.join(__dirname, 'files', 'file1.txt'),`If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.`, (err) => {
   if(err) throw err;
   console.log('\nThe file has been written!')
+
+  fs.appendFile(path.join(__dirname, 'files', 'file1.txt'),`\n\n*** NEW ***\nIf you are going to change a passage of Lorem Ipsum, you need to be sure that the change will be funny.`, (err) => {
+    if(err) throw err;
+    console.log('\nThe append is complete!')
+  })
+
 })
+
